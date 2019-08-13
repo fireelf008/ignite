@@ -3,9 +3,9 @@ package com.test.ignite.config;
 import com.test.ignite.pojo.User;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
+import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
-import org.apache.ignite.springdata20.repository.config.EnableIgniteRepositories;
 import org.apache.ignite.springdata20.repository.support.IgniteRepositoryFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +27,9 @@ public class IgniteConfig {
         cfg.setPeerClassLoadingEnabled(true);
 
         // Defining and creating a new cache to be used by Ignite Spring Data repository.
-        CacheConfiguration userCache = new CacheConfiguration("userCache");
-
+        CacheConfiguration userCache = new CacheConfiguration();
+        userCache.setName("userCache");
+        userCache.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
         // Setting SQL schema for the cache.
         userCache.setIndexedTypes(Long.class, User.class);
 

@@ -1,5 +1,6 @@
 package com.test.ignite.service;
 
+import org.apache.ignite.Ignite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ public class JdbcTemplateService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private Ignite ignite;
 
     public void createTable() {
         this.jdbcTemplate.execute("drop table if exists tb_user");

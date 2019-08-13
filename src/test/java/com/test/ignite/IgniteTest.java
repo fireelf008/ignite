@@ -6,6 +6,7 @@ import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.CacheWriteSynchronizationMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.transactions.Transaction;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ public class IgniteTest {
 		log.info("----------begin----------");
 	}
 
-	@Test
+	@After
 	public void testSeq(){
 		log.info("----------end----------");
 	}
