@@ -27,12 +27,12 @@ public class IgniteConfig {
         cfg.setPeerClassLoadingEnabled(true);
 
         // Defining and creating a new cache to be used by Ignite Spring Data repository.
-        CacheConfiguration ccfg = new CacheConfiguration("userCache");
+        CacheConfiguration userCache = new CacheConfiguration("userCache");
 
         // Setting SQL schema for the cache.
-        ccfg.setIndexedTypes(Long.class, User.class);
+        userCache.setIndexedTypes(Long.class, User.class);
 
-        cfg.setCacheConfiguration(ccfg);
+        cfg.setCacheConfiguration(userCache);
 
         return Ignition.start(cfg);
     }

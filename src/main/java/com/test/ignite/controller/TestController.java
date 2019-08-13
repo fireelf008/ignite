@@ -45,7 +45,7 @@ public class TestController {
     public ResponseEntity<List<User>> findByPage(@ApiParam(name = "page", value = "页数") @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                  @ApiParam(name = "size", value = "条数") @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
         log.info("==========>param is page:{}, size:{}", page, size);
-        List<User> userPage = this.userService.findByPage(page, size);
+        List<User> userPage = this.userService.findByAgeGreaterThanEqual();
         return Optional.ofNullable(userPage).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 

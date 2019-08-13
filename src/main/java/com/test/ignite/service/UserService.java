@@ -38,7 +38,6 @@ public class UserService {
     }
 
     public List<User> findByAgeGreaterThanEqual() {
-//        return this.userRepository.findByAgeGreaterThanEqual(20);
-        return null;
+        return this.userRepository.findByAgeGreaterThanEqual(25);
     }
 }

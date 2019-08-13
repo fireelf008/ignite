@@ -16,7 +16,7 @@ public class JdbcTemplateService {
     public void createTable() {
         this.jdbcTemplate.execute("drop table if exists tb_user");
         this.jdbcTemplate.execute("create table tb_user (" +
-                "id bigint(20) auto_increment, " +
+                "id bigint(20), " +
                 "name varchar(50), " +
                 "age int(11), " +
                 "sex varchar(10), " +
