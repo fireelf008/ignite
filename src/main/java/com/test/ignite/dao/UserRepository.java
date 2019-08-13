@@ -1,10 +1,18 @@
 package com.test.ignite.dao;
 
 import com.test.ignite.pojo.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.apache.ignite.springdata20.repository.IgniteRepository;
+import org.apache.ignite.springdata20.repository.config.Query;
+import org.apache.ignite.springdata20.repository.config.RepositoryConfig;
+import org.springframework.data.domain.Pageable;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.List;
 
+@RepositoryConfig(cacheName = "userCache")
+public interface UserRepository extends IgniteRepository<User, Long> {
+
+    @Query(value = "select * from User")
+    List<User> findByPage(Pageable pageable);
+
+//    List<User> findByAgeGreaterThanEqual(Integer age);
 }
