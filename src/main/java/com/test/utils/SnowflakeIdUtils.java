@@ -1,4 +1,4 @@
-package com.test.ignite.utils;
+package com.test.utils;
 
 /**
  * Twitter_Snowflake<br>

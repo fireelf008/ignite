@@ -1,4 +1,4 @@
-package com.test.ignite.pojo;
+package com.test.pojo;
 
 import lombok.Data;
 import org.apache.ignite.cache.query.annotations.QuerySqlField;
@@ -26,8 +26,4 @@ public class User implements Serializable {
 
     @QuerySqlField
     private Date updateTime;
-
-    public User() {
-
-    }
 }

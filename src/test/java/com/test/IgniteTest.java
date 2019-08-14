@@ -1,4 +1,4 @@
-package com.test.ignite;
+package com.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.*;

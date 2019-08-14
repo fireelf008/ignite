@@ -1,6 +1,6 @@
-package com.test.ignite.dao;
+package com.test.dao.ignite;
 
-import com.test.ignite.pojo.User;
+import com.test.pojo.User;
 import org.apache.ignite.springdata20.repository.IgniteRepository;
 import org.apache.ignite.springdata20.repository.config.Query;
 import org.apache.ignite.springdata20.repository.config.RepositoryConfig;

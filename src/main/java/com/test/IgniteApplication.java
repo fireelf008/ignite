@@ -1,4 +1,4 @@
-package com.test.ignite;
+package com.test;
 
 import org.apache.ignite.springdata20.repository.config.EnableIgniteRepositories;
 import org.springframework.boot.SpringApplication;

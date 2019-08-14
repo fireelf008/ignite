@@ -1,8 +1,7 @@
-package com.test.ignite.controller;
+package com.test.controller;
 
-import com.test.ignite.pojo.User;
-import com.test.ignite.service.JdbcTemplateService;
-import com.test.ignite.service.UserService;
+import com.test.pojo.User;
+import com.test.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,9 +26,6 @@ public class TestController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JdbcTemplateService jdbcTemplateService;
-
     @PostMapping(value = "/insert")
     @ApiOperation(value = "新增用户" , notes = "新增用户")
     public ResponseEntity<Void> insert(@ApiParam(name = "name" ,required = true , value = "姓名") @RequestParam(value = "name") String name,
@@ -49,24 +45,10 @@ public class TestController {
         return Optional.ofNullable(userPage).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping(value = "/create-table")
-    @ApiOperation(value = "创建测试表" , notes = "创建测试表")
-    public ResponseEntity<Void> createTable() {
-        this.jdbcTemplateService.createTable();
+    @GetMapping(value = "/clear")
+    @ApiOperation(value = "清空数据" , notes = "清空数据")
+    public ResponseEntity<Void> clear() {
+        this.userService.clear();
         return new ResponseEntity<Void>(HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/insert-data")
-    @ApiOperation(value = "插入测试数据" , notes = "插入测试数据")
-    public ResponseEntity<Void> insertData() {
-        this.jdbcTemplateService.insertData();
-        return new ResponseEntity<Void>(HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/query-data")
-    @ApiOperation(value = "查询测试数据" , notes = "查询测试数据")
-    public ResponseEntity<List<Map<String, Object>>> queryData() {
-        List<Map<String, Object>> mapList = this.jdbcTemplateService.queryData();
-        return Optional.of(mapList).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }

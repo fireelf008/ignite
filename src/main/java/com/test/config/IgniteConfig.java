@@ -1,6 +1,7 @@
-package com.test.ignite.config;
+package com.test.config;
 
-import com.test.ignite.pojo.User;
+import com.test.dao.jdbc.UserCacheStore;
+import com.test.pojo.User;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.CacheAtomicityMode;
@@ -11,6 +12,8 @@ import org.apache.ignite.configuration.WALMode;
 import org.apache.ignite.springdata20.repository.support.IgniteRepositoryFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.cache.configuration.FactoryBuilder;
 
 @Configuration
 public class IgniteConfig {
@@ -29,19 +32,25 @@ public class IgniteConfig {
         cfg.setPeerClassLoadingEnabled(true);
 
         //配置允许持久化到磁盘
-        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
-        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
-        storageCfg.setWalMode(WALMode.FSYNC);
-        cfg.setDataStorageConfiguration(storageCfg);
+//        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+//        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+//        storageCfg.setWalMode(WALMode.FSYNC);
+//        cfg.setDataStorageConfiguration(storageCfg);
 
         //配置缓存
-        CacheConfiguration userCache = new CacheConfiguration();
-        userCache.setName("userCache");
-        userCache.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
-        userCache.setIndexedTypes(Long.class, User.class);
+        CacheConfiguration userCacheConfiguration = new CacheConfiguration();
+        userCacheConfiguration.setName("userCache");
+        userCacheConfiguration.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
+        userCacheConfiguration.setIndexedTypes(Long.class, User.class);
+
+
+        userCacheConfiguration.setCacheStoreFactory(FactoryBuilder.factoryOf(UserCacheStore.class));
+        userCacheConfiguration.setReadThrough(true);
+        userCacheConfiguration.setWriteThrough(true);
+
 
         //设置缓存配置到上下文环境中
-        cfg.setCacheConfiguration(userCache);
+        cfg.setCacheConfiguration(userCacheConfiguration);
 
         //激活集群使持久化生效
         Ignite ignite = Ignition.start(cfg);

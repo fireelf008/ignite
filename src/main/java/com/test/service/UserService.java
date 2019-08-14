@@ -1,16 +1,15 @@
-package com.test.ignite.service;
+package com.test.service;
 
-import com.test.ignite.dao.UserRepository;
-import com.test.ignite.pojo.User;
-import com.test.ignite.utils.SnowflakeIdUtils;
+import com.test.dao.ignite.UserRepository;
+import com.test.pojo.User;
+import com.test.utils.SnowflakeIdUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.transactions.Transaction;
-import org.apache.ignite.transactions.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
@@ -52,6 +52,17 @@ public class UserService {
     public List<User> findByPage(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
         return this.userRepository.findByPage(pageable);
+    }
+
+    public void clear() {
+        Transaction tx = this.ignite.transactions().txStart();
+        try {
+            this.userRepository.deleteAll();
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            tx.rollback();
+        }
     }
 
     public void transactionTest() {
