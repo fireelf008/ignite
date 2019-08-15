@@ -36,13 +36,29 @@ public class TestController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/findByPage")
+    @GetMapping(value = "/find-by-page")
     @ApiOperation(value = "分页查询用户" , notes = "分页查询用户")
     public ResponseEntity<List<User>> findByPage(@ApiParam(name = "page", value = "页数") @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                                                  @ApiParam(name = "size", value = "条数") @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
         log.info("==========>param is page:{}, size:{}", page, size);
         List<User> userPage = this.userService.findByPage(page, size);
         return Optional.ofNullable(userPage).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "/find-by-id")
+    @ApiOperation(value = "按id查询用户" , notes = "按id查询用户")
+    public ResponseEntity<User> findById(@ApiParam(name = "id" ,required = true , value = "id") @RequestParam(value = "id") Long id) {
+        log.info("==========>param is id:{}", id);
+        User user = this.userService.findById(id);
+        return Optional.ofNullable(user).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "/delete-by-id")
+    @ApiOperation(value = "按id删除用户" , notes = "按id删除用户")
+    public ResponseEntity<Void> deleteById(@ApiParam(name = "id" ,required = true , value = "id") @RequestParam(value = "id") Long id) {
+        log.info("==========>param is id:{}", id);
+        this.userService.deleteById(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/clear")

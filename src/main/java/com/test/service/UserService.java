@@ -15,8 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.cache.Cache;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -41,7 +43,6 @@ public class UserService {
             user.setCreateTime(new Date());
             user.setUpdateTime(new Date());
             this.userRepository.save(user.getId(), user);
-//            int i = 1/0;
             tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,6 +53,22 @@ public class UserService {
     public List<User> findByPage(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
         return this.userRepository.findByPage(pageable);
+    }
+
+    public User findById(Long id) {
+        Optional<User> user = this.userRepository.findById(id);
+        return user.isPresent() ? user.get() : null;
+    }
+
+    public void deleteById(Long id) {
+        Transaction tx = this.ignite.transactions().txStart();
+        try {
+            this.userRepository.deleteById(id);
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            tx.rollback();
+        }
     }
 
     public void clear() {
