@@ -67,23 +67,20 @@ public class UserCacheStore extends CacheStoreAdapter<Long, User> implements Lif
         String sql = "delete from tb_user where id = :id";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("id", id);
+
         this.jdbcTemplate.update(sql, paramMap);
     }
 
     @Override
     public void loadCache(IgniteBiInClosure<Long, User> clo, Object... args) {
-        if (null != args && 0 != args.length && null != args[0]) {
-            int entryCnt = (Integer)args[0];
-            final AtomicInteger cnt = new AtomicInteger();
+        final AtomicInteger cnt = new AtomicInteger();
 
-            String sql = "select * from tb_user";
-            List<User> userList  = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class));
-            userList.forEach(u -> {
-                clo.apply(u.getId(), u);
-                cnt.incrementAndGet();
-            });
-            System.out.println(">>> Loaded " + cnt + " values into cache.");
-        }
+        String sql = "select * from tb_user";
+        List<User> userList  = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class));
+        userList.forEach(u -> {
+            clo.apply(u.getId(), u);
+            cnt.incrementAndGet();
+        });
     }
 
     @Override
@@ -97,12 +94,10 @@ public class UserCacheStore extends CacheStoreAdapter<Long, User> implements Lif
         if (null == this.jdbcTemplate) {
             this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         }
-        log.info("start--------------------------" + jdbcTemplate);
-        log.info("start--------------ignite------------" + ignite);
     }
 
     @Override
     public void stop() throws IgniteException {
-        log.info("stop--------------------------" + jdbcTemplate);
+
     }
 }

@@ -43,11 +43,17 @@ public class IgniteConfig {
         userCacheConfiguration.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
         userCacheConfiguration.setIndexedTypes(Long.class, User.class);
 
-
+        //配置缓存与数据库的通读通写实现类
         userCacheConfiguration.setCacheStoreFactory(FactoryBuilder.factoryOf(UserCacheStore.class));
         userCacheConfiguration.setReadThrough(true);
         userCacheConfiguration.setWriteThrough(true);
 
+        //配置缓存为后写缓存，缓存与数据库非实时同步
+//        userCacheConfiguration.setWriteBehindEnabled(true);
+//        //缓冲区大小
+//        userCacheConfiguration.setWriteBehindFlushSize(10240);
+//        //刷新间隔
+//        userCacheConfiguration.setWriteBehindFlushFrequency(5000);
 
         //设置缓存配置到上下文环境中
         cfg.setCacheConfiguration(userCacheConfiguration);
@@ -55,6 +61,9 @@ public class IgniteConfig {
         //激活集群使持久化生效
         Ignite ignite = Ignition.start(cfg);
         ignite.cluster().active(true);
+
+        //缓存预加载
+        ignite.cache("userCache").loadCache(null);
         return ignite;
     }
 }
