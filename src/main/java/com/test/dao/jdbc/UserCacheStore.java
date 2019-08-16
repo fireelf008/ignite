@@ -4,22 +4,17 @@ import com.test.pojo.User;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteException;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
 import org.apache.ignite.lang.IgniteBiInClosure;
 import org.apache.ignite.lifecycle.LifecycleAware;
-import org.apache.ignite.resources.IgniteInstanceResource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.cache.Cache;
 import javax.cache.integration.CacheLoaderException;
 import javax.cache.integration.CacheWriterException;
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +25,6 @@ public class UserCacheStore extends CacheStoreAdapter<Long, User> implements Lif
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    @IgniteInstanceResource
-    private Ignite ignite;
     @Override
     public User load(Long id) throws CacheLoaderException {
         String sql = "select * from tb_user where id = :id";
