@@ -29,6 +29,10 @@ public class UserCacheStore extends CacheStoreAdapter<Long, User> implements Lif
 
     @Override
     public User load(Long id) throws CacheLoaderException {
+        if (null == this.userMapper) {
+            this.userMapper = ApplicationContextUtils.getBean(UserMapper.class);
+        }
+
         return this.userMapper.findById(id);
     }
 
@@ -48,19 +52,23 @@ public class UserCacheStore extends CacheStoreAdapter<Long, User> implements Lif
 
     @Override
     public void delete(Object id) throws CacheWriterException {
+        if (null == this.userMapper) {
+            this.userMapper = ApplicationContextUtils.getBean(UserMapper.class);
+        }
+
         this.userMapper.delete(Long.parseLong(id.toString()));
     }
 
     @Override
     public void loadCache(IgniteBiInClosure<Long, User> clo, Object... args) {
-        final AtomicInteger cnt = new AtomicInteger();
-
-        String sql = "select * from tb_user";
-        List<User> userList  = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class));
-        userList.forEach(u -> {
-            clo.apply(u.getId(), u);
-            cnt.incrementAndGet();
-        });
+//        final AtomicInteger cnt = new AtomicInteger();
+//
+//        String sql = "select * from tb_user";
+//        List<User> userList  = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class));
+//        userList.forEach(u -> {
+//            clo.apply(u.getId(), u);
+//            cnt.incrementAndGet();
+//        });
     }
 
     @Override
