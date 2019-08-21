@@ -61,14 +61,14 @@ public class UserCacheStore extends CacheStoreAdapter<Long, User> implements Lif
 
     @Override
     public void loadCache(IgniteBiInClosure<Long, User> clo, Object... args) {
-//        final AtomicInteger cnt = new AtomicInteger();
-//
-//        String sql = "select * from tb_user";
-//        List<User> userList  = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class));
-//        userList.forEach(u -> {
-//            clo.apply(u.getId(), u);
-//            cnt.incrementAndGet();
-//        });
+        final AtomicInteger cnt = new AtomicInteger();
+
+        String sql = "select * from tb_user";
+        List<User> userList  = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class));
+        userList.forEach(u -> {
+            clo.apply(u.getId(), u);
+            cnt.incrementAndGet();
+        });
     }
 
     @Override
