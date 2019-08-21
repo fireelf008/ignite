@@ -1,15 +1,11 @@
 package com.test.config;
 
-import com.test.dao.jdbc.UserCacheStore;
+import com.test.dao.db.UserCacheStore;
 import com.test.pojo.User;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.CacheAtomicityMode;
-import org.apache.ignite.configuration.CacheConfiguration;
-import org.apache.ignite.configuration.DataStorageConfiguration;
-import org.apache.ignite.configuration.IgniteConfiguration;
-import org.apache.ignite.configuration.WALMode;
-import org.apache.ignite.springdata20.repository.support.IgniteRepositoryFactoryBean;
+import org.apache.ignite.configuration.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,10 +13,7 @@ import javax.cache.configuration.FactoryBuilder;
 
 @Configuration
 public class IgniteConfig {
-    /**
-     * Creating Apache Ignite instance bean. A bean will be passed to {@link IgniteRepositoryFactoryBean} to initialize
-     * all Ignite based Spring Data repositories and connect to a cluster.
-     */
+
     @Bean
     public Ignite igniteInstance() {
         IgniteConfiguration cfg = new IgniteConfiguration();
@@ -31,11 +24,14 @@ public class IgniteConfig {
         // Enabling peer-class loading feature.
         cfg.setPeerClassLoadingEnabled(true);
 
+        // 分配分配给节点的的最大内存为1G
+        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+        storageCfg.getDefaultDataRegionConfiguration().setMaxSize(1L * 1024 * 1024 * 1024);
+
         //配置允许持久化到磁盘
-//        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
 //        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
 //        storageCfg.setWalMode(WALMode.FSYNC);
-//        cfg.setDataStorageConfiguration(storageCfg);
+        cfg.setDataStorageConfiguration(storageCfg);
 
         //配置缓存
         CacheConfiguration userCacheConfiguration = new CacheConfiguration();

@@ -1,4 +1,4 @@
-package com.test.service;
+package com.test.service.crud;
 
 import com.test.dao.ignite.UserRepository;
 import com.test.pojo.User;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.cache.Cache;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

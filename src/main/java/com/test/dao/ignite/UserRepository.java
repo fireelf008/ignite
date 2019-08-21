@@ -14,6 +14,4 @@ public interface UserRepository extends IgniteRepository<User, Long> {
 
     @Query(value = "select * from User")
     List<User> findByPage(Pageable pageable);
-
-    Cache.Entry<Long, User> findTopById(Long id);
 }

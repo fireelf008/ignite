@@ -1,6 +1,8 @@
-package com.test.dao.jdbc;
+package com.test.dao.db;
 
+import com.test.dao.mapper.UserMapper;
 import com.test.pojo.User;
+import com.test.utils.ApplicationContextUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +17,7 @@ import javax.cache.Cache;
 import javax.cache.integration.CacheLoaderException;
 import javax.cache.integration.CacheWriterException;
 import javax.sql.DataSource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -25,43 +25,30 @@ public class UserCacheStore extends CacheStoreAdapter<Long, User> implements Lif
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    private UserMapper userMapper;
+
     @Override
     public User load(Long id) throws CacheLoaderException {
-        String sql = "select * from tb_user where id = :id";
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("id", id);
-
-        User user = this.jdbcTemplate.queryForObject(sql, paramMap, new BeanPropertyRowMapper<User>(User.class));
-        return user;
+        return this.userMapper.findById(id);
     }
 
     @Override
     public void write(Cache.Entry<? extends Long, ? extends User> entry) throws CacheWriterException {
         User user = entry.getValue();
 
-        String sql = "update tb_user set name = :name, age = :age, sex = :sex, create_time = :create_time, update_time = :update_time where id = :id";
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("id", user.getId());
-        paramMap.put("name", user.getName());
-        paramMap.put("age", user.getAge());
-        paramMap.put("sex", user.getSex());
-        paramMap.put("create_time", user.getCreateTime());
-        paramMap.put("update_time", user.getUpdateTime());
+        if (null == this.userMapper) {
+            this.userMapper = ApplicationContextUtils.getBean(UserMapper.class);
+        }
 
-        int count = this.jdbcTemplate.update(sql, paramMap);
+        int count = this.userMapper.update(user);
         if (0 == count) {
-            sql = "insert into tb_user (id, name, age, sex, create_time, update_time) values (:id, :name, :age, :sex, :create_time, :update_time)";
-            this.jdbcTemplate.update(sql, paramMap);
+            this.userMapper.insert(user);
         }
     }
 
     @Override
     public void delete(Object id) throws CacheWriterException {
-        String sql = "delete from tb_user where id = :id";
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("id", id);
-
-        this.jdbcTemplate.update(sql, paramMap);
+        this.userMapper.delete(Long.parseLong(id.toString()));
     }
 
     @Override
