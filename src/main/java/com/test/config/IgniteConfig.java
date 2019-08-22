@@ -1,11 +1,15 @@
 package com.test.config;
 
 import com.test.dao.db.UserCacheStore;
+import com.test.dao.mapper.UserMapper;
 import com.test.pojo.User;
+import com.test.utils.ApplicationContextUtils;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.configuration.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +18,13 @@ import javax.cache.configuration.FactoryBuilder;
 @Configuration
 public class IgniteConfig {
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @Bean
     public Ignite igniteInstance() {
+        ApplicationContextUtils.setApplicationContext(applicationContext);
+
         IgniteConfiguration cfg = new IgniteConfiguration();
 
         //配置节点名称，相同节点名称会自动发现组成集群

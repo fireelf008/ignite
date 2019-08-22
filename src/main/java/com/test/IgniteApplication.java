@@ -6,6 +6,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
@@ -15,7 +16,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class IgniteApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext applicationContext = SpringApplication.run(IgniteApplication.class, args);
-		ApplicationContextUtils.setApplicationContext(applicationContext);
+		SpringApplication.run(IgniteApplication.class, args);
 	}
 }
