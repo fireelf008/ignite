@@ -1,7 +1,6 @@
 package com.test.config;
 
 import com.test.dao.db.UserCacheStore;
-import com.test.dao.mapper.UserMapper;
 import com.test.pojo.User;
 import com.test.utils.ApplicationContextUtils;
 import org.apache.ignite.Ignite;
